@@ -15,6 +15,17 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
+import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp';
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
+import { SetUserContext, UserContext } from '../UserContext';
+import LoginIcon from '@mui/icons-material/Login';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
+import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
+import { useContext } from 'react';
+import { SetNotificationContext } from '../NotificatinContext';
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -57,11 +68,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [isMainMenuOpen, setIsMainMenuOpen] = React.useState(false);
+  const user = React.useContext(UserContext)
+  const setUser = useContext(SetUserContext)
+  const setNotification = useContext(SetNotificationContext)
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const handleMainMenuOpen = () => {
+    setIsMainMenuOpen(true);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -75,7 +94,14 @@ export default function Header() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
+  const handleNavigateHome=()=>{
+    navigate('/')
+    setIsMainMenuOpen(false)
+  }
+  const handleOpenNewMenuWithExistingAnchor = () => {
+    setAnchorEl(anchorEl); // Set the anchor element for the new menu
+    setIsMainMenuOpen(true);
+  };
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -97,8 +123,66 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
+      {user?.user&&
+      <MenuItem >
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+          {/* <p>Profile</p> */}
+        </IconButton>
+      </MenuItem>}
+      {user?.user&&
+      <MenuItem >
+        <IconButton onClick={()=>{
+          localStorage.clear('token');
+          setUser({user:null})
+          navigate('/')
+          setNotification({open:true,
+            msg:'You have succesfully logged out',severity:'success'})
+        }}
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <MeetingRoomOutlinedIcon />
+          {/* <p>logout</p> */}
+        </IconButton>
+      </MenuItem>}
+      {!user?.user&&
+      <MenuItem >
+        <IconButton onClick={()=>{navigate('/login')}}
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LoginIcon/>
+          {/* <p>Login</p> */}
+        </IconButton>
+      </MenuItem>}
+      {!user?.user&&
+      <MenuItem >
+        <IconButton onClick={()=>{navigate('/signup')}}
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <VpnKeyOutlinedIcon/>
+          {/* <p>Signup</p> */}
+        </IconButton>
+      </MenuItem>}
+      
     </Menu>
   );
 
@@ -119,38 +203,65 @@ export default function Header() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem> */}
-      {/* <MenuItem>
+      {user?.user&&
+      <MenuItem >
         <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem> */}
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
+          size="small"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
         >
           <AccountCircle />
+          {/* <p>Profile</p> */}
         </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      </MenuItem>}
+      {user?.user&&
+      <MenuItem >
+        <IconButton onClick={()=>{
+          localStorage.clear('token');
+          setUser({user:null})
+          navigate('/')
+          setNotification({open:true,
+            msg:'You have succesfully logged out',severity:'success'})
+        }}
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <MeetingRoomOutlinedIcon />
+          {/* <p>logout</p> */}
+        </IconButton>
+      </MenuItem>}
+      {!user?.user&&
+      <MenuItem >
+        <IconButton onClick={()=>{navigate('/login')}}
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LoginIcon/>
+          {/* <p>Login</p> */}
+        </IconButton>
+      </MenuItem>}
+      {!user?.user&&
+      <MenuItem >
+        <IconButton onClick={()=>{navigate('/signup')}}
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <VpnKeyOutlinedIcon/>
+          {/* <p>Signup</p> */}
+        </IconButton>
+      </MenuItem>}
+      
     </Menu>
   );
 
@@ -158,7 +269,7 @@ export default function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          <IconButton onClick={handleOpenNewMenuWithExistingAnchor}
             size="large"
             edge="start"
             color="inherit"
@@ -167,6 +278,30 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
+          {isMainMenuOpen && (
+        <Menu
+        anchorEl={anchorEl} // Set the anchor element as needed
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          open={isMainMenuOpen}
+          onClose={() => setIsMainMenuOpen(false)} // Close the menu when needed
+        >
+        <MenuItem onClick={handleNavigateHome}>{<HomeTwoToneIcon/>}</MenuItem>
+        {user?.user&&
+        <MenuItem onClick={handleNavigateHome}>{<ShoppingCartSharpIcon/>}</MenuItem>
+}
+
+
+        </Menu>
+      )}
           <Typography
             variant="h6"
             noWrap
@@ -186,20 +321,7 @@ export default function Header() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
+            
             <IconButton
               size="large"
               edge="end"
