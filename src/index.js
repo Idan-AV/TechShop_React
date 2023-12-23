@@ -10,6 +10,23 @@ import UserProvider from './UserContext';
 import Notification from './Notification/Notification';
 import SignupPage from './SignupPage/SignupPage';
 import ProductDetail from './ProductDetail/ProductDetail';
+import SavedProducts from './SavedProducts/SavedProducts';
+import PurchasingPage from './PurchasingPage/PurchasingPage';
+import axios from 'axios';
+import ProfilePage from './ProfilePage/ProfilePage';
+axios.interceptors.request.use(
+  (config) => {
+  
+    const token = localStorage.getItem('token')
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+
+    return config
+  }
+)
+
 
 
 const router = createBrowserRouter([
@@ -24,6 +41,18 @@ const router = createBrowserRouter([
       {
         path:'/products/:productId',
         element:<ProductDetail/>
+      },
+      {
+        path:'/Saved-Products',
+        element:<SavedProducts/>
+      },
+      {
+        path:'/purchasing',
+        element:<PurchasingPage/>
+      },
+      {
+        path: '/Profile-Page',
+        element:<ProfilePage/>
       }
   
     ]

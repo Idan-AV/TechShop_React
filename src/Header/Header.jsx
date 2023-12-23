@@ -26,6 +26,7 @@ import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined';
 import { useContext } from 'react';
 import { SetNotificationContext } from '../NotificatinContext';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import MyDrawer from '../MyDrawer/MyDrawer';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -75,6 +76,7 @@ export default function Header() {
   const user = React.useContext(UserContext)
   const setUser = useContext(SetUserContext)
   const setNotification = useContext(SetNotificationContext)
+  const [open, setOpen] = React.useState(false)
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -126,7 +128,12 @@ export default function Header() {
       {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
       {user?.user&&
       <MenuItem >
-        <IconButton
+        <IconButton onClick={()=>{
+          navigate('/Profile-Page')
+          setAnchorEl(null);
+    handleMobileMenuClose();
+        
+        }}
           size="small"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -205,7 +212,10 @@ export default function Header() {
     >
       {user?.user&&
       <MenuItem >
-        <IconButton
+        <IconButton onClick={()=>{
+          navigate('/Profile-Page')
+          setMobileMoreAnchorEl(null);
+        }}
           size="small"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -296,7 +306,11 @@ export default function Header() {
         >
         <MenuItem onClick={handleNavigateHome}>{<HomeTwoToneIcon/>}</MenuItem>
         {user?.user&&
-        <MenuItem onClick={handleNavigateHome}>{<ShoppingCartSharpIcon/>}</MenuItem>
+        <MenuItem onClick={()=>{
+          // navigate('/Saved-Products')
+          setOpen(true)
+          setIsMainMenuOpen(false)
+        }}>{<ShoppingCartSharpIcon/>}</MenuItem>
 }
 
 
@@ -315,6 +329,7 @@ export default function Header() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+            
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />
@@ -322,7 +337,7 @@ export default function Header() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             
-            <IconButton
+            <IconButton 
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -350,6 +365,9 @@ export default function Header() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {open&&
+    <MyDrawer isOpen={open} setIsOpen={setOpen} />}
     </Box>
+    
   );
 }

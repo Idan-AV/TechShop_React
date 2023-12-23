@@ -5,12 +5,23 @@ import { ALL_PRODUCTS } from '../infra/urls'
 import { itemsContext, setItemsContext } from '../ItemsContext'
 import ItemsList from '../ItemsList/ItemsList'
 import { SetNotificationContext } from '../NotificatinContext'
+import AddCircleTwoToneIcon from '@mui/icons-material/AddCircleTwoTone';
+import { Fab, IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import { UserContext } from '../UserContext'
+import { savedItemsContext, SavedItemsFunctionContext } from '../SavedItemsContext'
+import { FetchDataContext } from '../fetchDataContext'
+
 
 const HomePage = () => {
   const items = useContext(itemsContext)
   const setItems = useContext(setItemsContext)
   const setNotification = useContext(SetNotificationContext)
+  const user = useContext(UserContext)
+  const SavedItemsFunc = useContext(SavedItemsFunctionContext)
+  const savedItems = useContext(savedItemsContext)
   const fetchData = async ()=>{
+    console.log('user',user)
     try{
       let urlToSend = ALL_PRODUCTS
       if(items.next){
@@ -50,7 +61,14 @@ const HomePage = () => {
 
   return (
     <>
+    <FetchDataContext.Provider value={fetchData} >
     <ItemsList items={items} loadMore={fetchData}/>
+    {user?.user?.is_staff &&
+    <Fab color="primary" aria-label="add" 
+                sx={{position: 'absolute',bottom: 16, right: 16,}}>
+                <AddIcon />
+            </Fab>}
+            </FetchDataContext.Provider>
     </>
   )
 }

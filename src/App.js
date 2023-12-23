@@ -8,6 +8,7 @@ import { ME_URL } from './infra/urls';
 import axios from 'axios';
 import { SetUserContext } from './UserContext';
 import Notification from './Notification/Notification';
+import { SavedItemsProvider } from './SavedItemsContext';
 
 function App() {
   const [items, setItems] = useState({results:[]})
@@ -32,12 +33,16 @@ function App() {
     <>
   <Header/>
   <br/>
+
+  <SavedItemsProvider>
   <setItemsContext.Provider value={setItems}>
   <itemsContext.Provider value={items}>
   <Outlet/>
   </itemsContext.Provider>
   </setItemsContext.Provider>
   <Notification/>
+  </SavedItemsProvider>
+
   </>
  )
 }

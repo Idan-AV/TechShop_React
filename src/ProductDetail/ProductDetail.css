@@ -1,0 +1,36 @@
+/* img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  } */
+
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .horizontal-rule {
+    border-top: 1px solid #dddddd;
+  }
+  
+  @media screen and (max-width: 600px) {
+    th, td {
+      font-size: 14px;
+    }
+  }
+  
